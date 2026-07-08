@@ -53,6 +53,7 @@ def main():
 
     criterion=nn.CrossEntropyLoss()
     optimizer=optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
 
 
@@ -67,7 +68,7 @@ def main():
             outputs=model(inputs)
             loss=criterion(outputs,labels)
             loss.backward()
-            optimizer.step()
+            scheduler.step()
             running_loss+=loss.item()
             if i%200==199:
                 print(f"[epoch:{epoch+1} batch:{i+1}]  loss:{running_loss/200:.3f}")
